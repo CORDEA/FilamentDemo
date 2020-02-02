@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets
 inline class MaterialName(val value: String) {
     companion object {
         fun from(stream: InputStream) =
-            (0..stream.readUIntLE()).map {
+            (0 until stream.readUIntLE()).map {
                 val data = ByteArray(stream.readUIntLE())
                 stream.read(data)
                 stream.skip(1)
