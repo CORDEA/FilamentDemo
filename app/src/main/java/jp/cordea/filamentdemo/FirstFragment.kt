@@ -27,6 +27,9 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
     private lateinit var material: Material
     private lateinit var materialInstance: MaterialInstance
 
+    @Entity
+    private var light = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -82,6 +85,16 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             Material.Builder().payload(buffer, buffer.remaining()).build(engine)
         }
         materialInstance = material.createInstance()
+
+        light = EntityManager.get().create()
+        val (r, g, b) = Colors.cct(5500f)
+        LightManager.Builder(LightManager.Type.DIRECTIONAL)
+            .color(r, g, b)
+            .intensity(110000f)
+            .direction(0f, -0.5f, -1f)
+            .castShadows(true)
+            .build(engine, light)
+        scene.addEntity(light)
 
         camera.setExposure(16f, 1f / 125f, 100f)
         camera.lookAt(
