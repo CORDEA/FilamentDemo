@@ -26,6 +26,7 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
     private lateinit var camera: Camera
     private lateinit var material: Material
     private lateinit var materialInstance: MaterialInstance
+    private lateinit var mesh: Mesh
 
     @Entity
     private var light = 0
@@ -85,6 +86,9 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             Material.Builder().payload(buffer, buffer.remaining()).build(engine)
         }
         materialInstance = material.createInstance()
+
+        mesh = Mesh.from(requireContext().assets, "...", emptyMap(), engine)
+        scene.addEntity(mesh.renderable.entity)
 
         light = EntityManager.get().create()
         val (r, g, b) = Colors.cct(5500f)
