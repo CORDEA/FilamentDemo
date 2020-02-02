@@ -30,6 +30,7 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
 
     @Entity
     private var light = 0
+    private var swapChain: SwapChain? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,16 +45,28 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         choreographer = Choreographer.getInstance()
         uiHelper = UiHelper(UiHelper.ContextErrorPolicy.DONT_CHECK).apply {
             renderCallback = object : UiHelper.RendererCallback {
-                override fun onNativeWindowChanged(surface: Surface?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                override fun onNativeWindowChanged(surface: Surface) {
+                    swapChain?.let { engine.destroySwapChain(it) }
+                    swapChain = engine.createSwapChain(surface)
                 }
 
                 override fun onResized(width: Int, height: Int) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    camera.setProjection(
+                        45.0,
+                        width.toDouble() / height.toDouble(),
+                        0.1,
+                        20.0,
+                        Camera.Fov.VERTICAL
+                    )
+                    filamentView.viewport = Viewport(0, 0, width, height)
                 }
 
                 override fun onDetachedFromSurface() {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    swapChain?.let {
+                        engine.destroySwapChain(it)
+                        engine.flushAndWait()
+                        swapChain = null
+                    }
                 }
 
             }
@@ -116,6 +129,14 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
 
     override fun doFrame(frameTimeNanos: Long) {
         choreographer.postFrameCallback(this)
+        if (!uiHelper.isReadyToRender) {
+            return
+        }
+        if (!renderer.beginFrame(swapChain!!)) {
+            return
+        }
+        renderer.render(filamentView)
+        renderer.endFrame()
     }
 
     override fun onResume() {
