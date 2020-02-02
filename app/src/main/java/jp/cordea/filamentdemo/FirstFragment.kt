@@ -84,7 +84,7 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
     }
 
     private fun setupView() {
-        filamentView.setClearColor(0.035f, 0.035f, 0.035f, 1f)
+        filamentView.setClearColor(1f, 1f, 1f, 1f)
         filamentView.camera = camera
         filamentView.scene = scene
     }
