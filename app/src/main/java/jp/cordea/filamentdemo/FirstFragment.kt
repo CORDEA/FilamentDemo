@@ -90,7 +90,7 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
     }
 
     private fun setupScene() {
-        material = requireContext().assets.openFd("...").use { fd ->
+        material = requireContext().assets.openFd("lit.filamat").use { fd ->
             val stream = fd.createInputStream()
             val dst = ByteBuffer.allocate(fd.length.toInt())
             Channels.newChannel(stream).use { it.read(dst) }
@@ -99,8 +99,8 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             Material.Builder().payload(buffer, buffer.remaining()).build(engine)
         }
         materialInstance = material.createInstance()
-
-        mesh = Mesh.from(requireContext().assets, "...", emptyMap(), engine)
+        val map = mapOf(MaterialName("Material") to materialInstance)
+        mesh = Mesh.from(requireContext().assets, "sample.filamesh", map, engine)
         scene.addEntity(mesh.renderable.entity)
 
         light = EntityManager.get().create()
