@@ -188,10 +188,20 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         super.onDestroy()
         choreographer.removeFrameCallback(this)
         uiHelper.detach()
+
+        engine.destroyEntity(mesh.renderable.entity)
+        engine.destroyIndexBuffer(mesh.indexBuffer)
+        engine.destroyVertexBuffer(mesh.vertexBuffer)
+        EntityManager.get().destroy(mesh.renderable.entity)
+
         engine.destroyRenderer(renderer)
+        engine.destroyMaterialInstance(materialInstance)
+        engine.destroyMaterial(material)
         engine.destroyView(filamentView)
         engine.destroyScene(scene)
         engine.destroyCamera(camera)
+
+        EntityManager.get().destroy(light)
 
         engine.destroy()
     }
