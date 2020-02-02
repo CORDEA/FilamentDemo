@@ -6,6 +6,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.filament.*
 import com.google.android.filament.android.UiHelper
+import java.nio.ByteBuffer
+import java.nio.channels.Channels
 
 class FirstFragment : Fragment(), Choreographer.FrameCallback {
     companion object {
@@ -22,6 +24,8 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
     private lateinit var scene: Scene
     private lateinit var filamentView: com.google.android.filament.View
     private lateinit var camera: Camera
+    private lateinit var material: Material
+    private lateinit var materialInstance: MaterialInstance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,12 +63,38 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         camera = engine.createCamera()
 
         setupView()
+        setupScene()
     }
 
     private fun setupView() {
         filamentView.setClearColor(0.035f, 0.035f, 0.035f, 1f)
         filamentView.camera = camera
         filamentView.scene = scene
+    }
+
+    private fun setupScene() {
+        material = requireContext().assets.openFd("...").use { fd ->
+            val stream = fd.createInputStream()
+            val dst = ByteBuffer.allocate(fd.length.toInt())
+            Channels.newChannel(stream).use { it.read(dst) }
+
+            val buffer = dst.apply { rewind() }
+            Material.Builder().payload(buffer, buffer.remaining()).build(engine)
+        }
+        materialInstance = material.createInstance()
+
+        camera.setExposure(16f, 1f / 125f, 100f)
+        camera.lookAt(
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        )
     }
 
     override fun doFrame(frameTimeNanos: Long) {
