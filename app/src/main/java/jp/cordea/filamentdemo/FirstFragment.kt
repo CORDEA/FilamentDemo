@@ -98,7 +98,9 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             val buffer = dst.apply { rewind() }
             Material.Builder().payload(buffer, buffer.remaining()).build(engine)
         }
-        materialInstance = material.createInstance()
+        materialInstance = material.createInstance().apply {
+            setParameter("baseColor", Colors.RgbType.SRGB, 0f, 0.7f, 0f)
+        }
         val map = mapOf(MaterialName("Material") to materialInstance)
         mesh = Mesh.from(requireContext().assets, "sample.filamesh", map, engine)
         scene.addEntity(mesh.renderable.entity)
