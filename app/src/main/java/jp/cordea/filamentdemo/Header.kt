@@ -8,7 +8,7 @@ class Header(
     val parts: Int,
     val aabb: Box,
     val flags: Int,
-    val posOffset: Int,
+    val positionOffset: Int,
     val positionStride: Int,
     val tangentOffset: Int,
     val tangentStride: Int,

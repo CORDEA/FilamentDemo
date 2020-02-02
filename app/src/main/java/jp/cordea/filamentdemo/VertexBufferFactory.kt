@@ -20,7 +20,7 @@ object VertexBufferFactory {
                 VertexBuffer.VertexAttribute.POSITION,
                 0,
                 VertexBuffer.AttributeType.HALF4,
-                header.posOffset,
+                header.positionOffset,
                 header.positionStride
             )
             .attribute(
