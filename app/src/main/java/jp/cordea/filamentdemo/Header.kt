@@ -4,25 +4,25 @@ import com.google.android.filament.Box
 import java.io.InputStream
 
 class Header(
-    val versionNumber: Long,
-    val parts: Long,
+    val versionNumber: Int,
+    val parts: Int,
     val aabb: Box,
-    val flags: Long,
-    val posOffset: Long,
-    val positionStride: Long,
-    val tangentOffset: Long,
-    val tangentStride: Long,
-    val colorOffset: Long,
-    val colorStride: Long,
-    val uv0Offset: Long,
-    val uv0Stride: Long,
-    val uv1Offset: Long,
-    val uv1Stride: Long,
-    val totalVertices: Long,
-    val verticesSizeInBytes: Long,
-    val indices16Bit: Long,
-    val totalIndices: Long,
-    val indicesSizeInBytes: Long
+    val flags: Int,
+    val posOffset: Int,
+    val positionStride: Int,
+    val tangentOffset: Int,
+    val tangentStride: Int,
+    val colorOffset: Int,
+    val colorStride: Int,
+    val uv0Offset: Int,
+    val uv0Stride: Int,
+    val uv1Offset: Int,
+    val uv1Stride: Int,
+    val totalVertices: Int,
+    val verticesSizeInBytes: Int,
+    val indices16Bit: Int,
+    val totalIndices: Int,
+    val indicesSizeInBytes: Int
 ) {
     companion object {
         fun from(stream: InputStream) =

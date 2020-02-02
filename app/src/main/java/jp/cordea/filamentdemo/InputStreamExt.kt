@@ -10,9 +10,9 @@ fun InputStream.readFloat32LE() =
         .order(ByteOrder.LITTLE_ENDIAN)
         .float
 
-fun InputStream.readUIntLE(): Long =
-    (read() and 0xFF or
+fun InputStream.readUIntLE(): Int =
+    ((read() and 0xFF or
             (read() and 0xFF shl 8) or
             (read() and 0xFF shl 16) or
             (read() and 0xFF shl 24)
-            ).toLong() and 0xFFFFFFFFL
+            ).toLong() and 0xFFFFFFFFL).toInt()

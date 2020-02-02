@@ -4,16 +4,16 @@ import com.google.android.filament.Box
 import java.io.InputStream
 
 class Part(
-    val offset: Long,
-    val indexCount: Long,
-    val minIndex: Long,
-    val maxIndex: Long,
-    val materialId: Long,
+    val offset: Int,
+    val indexCount: Int,
+    val minIndex: Int,
+    val maxIndex: Int,
+    val materialId: Int,
     val aabb: Box
 ) {
     companion object {
         fun from(header: Header, stream: InputStream) =
-            (0 until header.parts.toInt()).map {
+            (0 until header.parts).map {
                 Part(
                     stream.readUIntLE(),
                     stream.readUIntLE(),
