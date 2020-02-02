@@ -1,5 +1,7 @@
 package jp.cordea.filamentdemo
 
+import android.animation.ValueAnimator
+import android.opengl.Matrix
 import android.os.Bundle
 import android.view.*
 import android.view.View
@@ -103,6 +105,15 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         }
         val map = mapOf(MaterialName("Material") to materialInstance)
         mesh = Mesh.from(requireContext().assets, "sample.filamesh", map, engine)
+        engine.transformManager.setTransform(
+            engine.transformManager.getInstance(mesh.renderable.entity),
+            floatArrayOf(
+                0.1f, 0f, 0f, 0f,
+                0f, 0.1f, 0f, 0f,
+                0f, 0f, 0.1f, 0f,
+                0f, 0f, 0f, 1f
+            )
+        )
         scene.addEntity(mesh.renderable.entity)
 
         light = EntityManager.get().create()
@@ -117,16 +128,38 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
 
         camera.setExposure(16f, 1f / 125f, 100f)
         camera.lookAt(
-            0.0,
-            0.0,
-            5.0,
-            0.0,
+            3.0,
             0.0,
             0.0,
             0.0,
             0.0,
+            0.0,
+            0.0,
+            1.0,
             0.0
         )
+
+        startAnimation()
+    }
+
+    private fun startAnimation() {
+        val matrix = FloatArray(16)
+        ValueAnimator.ofFloat(0f, 360f)
+            .apply {
+                duration = 2000L
+                repeatMode = ValueAnimator.RESTART
+                repeatCount = ValueAnimator.INFINITE
+                addUpdateListener { animation ->
+                    val value = animation.animatedValue as Float
+                    Matrix.setRotateM(matrix, 0, value, 0f, 1f, 0f)
+                    Matrix.scaleM(matrix, 0, 0.1f, 0.1f, 0.1f)
+                    engine.transformManager.setTransform(
+                        engine.transformManager.getInstance(mesh.renderable.entity),
+                        matrix
+                    )
+                }
+            }
+            .start()
     }
 
     override fun doFrame(frameTimeNanos: Long) {
