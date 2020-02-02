@@ -45,7 +45,7 @@ object VertexBufferFactory {
                 header.uv0Stride
             )
             .normalized(VertexBuffer.VertexAttribute.UV0, enabled)
-            .apply {
+            .run {
                 if (header.uv1Offset >= 0 && header.uv1Stride >= 0) {
                     attribute(
                         VertexBuffer.VertexAttribute.UV1,
@@ -53,8 +53,9 @@ object VertexBufferFactory {
                         uvType,
                         header.uv1Offset,
                         header.uv1Stride
-                    )
-                    normalized(VertexBuffer.VertexAttribute.UV1, enabled)
+                    ).normalized(VertexBuffer.VertexAttribute.UV1, enabled)
+                } else {
+                    this
                 }
             }
             .build(engine)
