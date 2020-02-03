@@ -3,6 +3,7 @@ package jp.cordea.filamentdemo
 import android.animation.ValueAnimator
 import android.opengl.Matrix
 import android.os.Bundle
+import android.util.SizeF
 import android.view.*
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -101,8 +102,14 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             Material.Builder().payload(buffer, buffer.remaining()).build(engine)
         }
         materialInstance = material.createInstance().apply {
-            setParameter("baseColor", Colors.RgbType.SRGB, 0f, 0.7f, 0f)
+            setParameter("baseColor", Colors.RgbType.SRGB, 1f, 1f, 0f)
         }
+
+        val size = SizeF(500f, 500f)
+        setTextureTransform(size)
+        FrontTexture(engine, materialInstance, size).draw()
+        BackTexture(engine, materialInstance, size).draw()
+
         val map = mapOf(MaterialName("Material") to materialInstance)
         mesh = Mesh.from(requireContext().assets, "sample.filamesh", map, engine)
         engine.transformManager.setTransform(
@@ -160,6 +167,17 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
                 }
             }
             .start()
+    }
+
+    private fun setTextureTransform(size: SizeF) {
+        val transform = FloatArray(16)
+        materialInstance.setParameter(
+            "textureTransform",
+            MaterialInstance.FloatElement.MAT4,
+            transform,
+            0,
+            1
+        )
     }
 
     override fun doFrame(frameTimeNanos: Long) {
