@@ -5,14 +5,39 @@ material {
         {
             type : float3,
             name : baseColor
+        },
+        {
+            type : samplerExternal,
+            name : frontTexture
+        },
+        {
+            type : mat4,
+            name : textureTransform
         }
     ],
+    variables : [
+        uv
+    ],
+}
+
+vertex {
+    void materialVertex(inout MaterialVertexInputs material) {
+        material.uv = 0.5 * (getPosition() + vec4(1));
+    }
 }
 
 fragment {
     void material(inout MaterialInputs material) {
         prepareMaterial(material);
 
-        material.baseColor.rgb = materialParams.baseColor;
+        material.metallic = 1.0;
+        material.clearCoat = 1.0;
+
+        if (variable_uv.x >= 1.0) {
+            vec2 uv = (vec4(variable_uv.xy, 0, 1)).xy;
+            material.baseColor = texture(materialParams_frontTexture, uv);
+        } else {
+            material.baseColor.rgb = materialParams.baseColor;
+        }
     }
 }
