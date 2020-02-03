@@ -11,6 +11,10 @@ material {
             name : frontTexture
         },
         {
+            type : samplerExternal,
+            name : backTexture
+        },
+        {
             type : mat4,
             name : textureTransform
         }
@@ -33,11 +37,13 @@ fragment {
         material.metallic = 1.0;
         material.clearCoat = 1.0;
 
+        vec2 uv = (vec4(variable_uv.xy, 0, 1)).xy;
         if (variable_uv.x >= 1.0) {
-            vec2 uv = (vec4(variable_uv.xy, 0, 1)).xy;
             material.baseColor = texture(materialParams_frontTexture, uv);
+        } else if (variable_uv.x <= 0.0) {
+            material.baseColor = texture(materialParams_backTexture, uv);
         } else {
-            material.baseColor.rgb = materialParams.baseColor;
+            material.baseColor.rgb = materialParams.baseColor.rgb;
         }
     }
 }
