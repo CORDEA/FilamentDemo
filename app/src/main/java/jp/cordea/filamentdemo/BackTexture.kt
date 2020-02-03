@@ -7,7 +7,7 @@ import android.util.SizeF
 import android.view.Surface
 import com.google.android.filament.*
 
-class FrontTexture(
+class BackTexture(
     engine: Engine,
     materialInstance: MaterialInstance,
     private val size: SizeF
@@ -17,7 +17,7 @@ class FrontTexture(
     private val stream: Stream
 
     private val paint = Paint().apply {
-        color = Color.WHITE
+        color = Color.RED
         style = Paint.Style.FILL
     }
 
@@ -33,7 +33,7 @@ class FrontTexture(
             TextureSampler.MagFilter.LINEAR,
             TextureSampler.WrapMode.REPEAT
         )
-        materialInstance.setParameter("frontTexture", texture, sampler)
+        materialInstance.setParameter("backTexture", texture, sampler)
         surfaceTexture = SurfaceTexture(0).apply {
             setDefaultBufferSize(size.width.toInt(), size.height.toInt())
             detachFromGLContext()
