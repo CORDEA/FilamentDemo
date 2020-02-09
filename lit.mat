@@ -16,7 +16,11 @@ material {
         },
         {
             type : samplerExternal,
-            name : normalTexture
+            name : frontNormalTexture
+        },
+        {
+            type : samplerExternal,
+            name : backNormalTexture
         },
         {
             type : mat4,
@@ -37,7 +41,11 @@ vertex {
 fragment {
     void material(inout MaterialInputs material) {
         vec2 uv = (materialParams.textureTransform * variable_uv).xy;
-        material.normal = texture(materialParams_normalTexture, uv).xyz * 2.0 - 1.0;
+        if (variable_uv.x >= 0.51) {
+            material.normal = texture(materialParams_frontNormalTexture, uv).xyz * 2.0 - 1.0;
+        } else if (variable_uv.x <= 0.49) {
+            material.normal = texture(materialParams_backNormalTexture, uv).xyz * 2.0 - 1.0;
+        }
         prepareMaterial(material);
 
         material.metallic = 1.0;
