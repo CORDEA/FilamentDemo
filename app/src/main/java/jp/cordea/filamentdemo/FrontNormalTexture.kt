@@ -8,7 +8,7 @@ import android.util.SizeF
 import android.view.Surface
 import com.google.android.filament.*
 
-class NormalTexture(
+class FrontNormalTexture(
     private val context: Context,
     engine: Engine,
     materialInstance: MaterialInstance,
@@ -30,7 +30,7 @@ class NormalTexture(
             TextureSampler.MagFilter.LINEAR,
             TextureSampler.WrapMode.REPEAT
         )
-        materialInstance.setParameter("normalTexture", texture, sampler)
+        materialInstance.setParameter("frontNormalTexture", texture, sampler)
         surfaceTexture = SurfaceTexture(0).apply {
             setDefaultBufferSize(size.width.toInt(), size.height.toInt())
             detachFromGLContext()
@@ -46,7 +46,7 @@ class NormalTexture(
 
     fun draw() {
         val canvas = canvasSurface.lockCanvas(null)
-        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.normal)
+        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.front_normal)
         canvas.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
         bitmap.recycle()
         canvasSurface.unlockCanvasAndPost(canvas)
