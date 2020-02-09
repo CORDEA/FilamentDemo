@@ -105,11 +105,12 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
             setParameter("baseColor", Colors.RgbType.SRGB, 1f, 1f, 0f)
         }
 
-        val size = SizeF(500f, 500f)
-        setTextureTransform(size)
-        FrontTexture(engine, materialInstance, size).draw()
-        BackTexture(engine, materialInstance, size).draw()
+        val size = SizeF(1008f, 625f)
+        FrontTexture(requireContext(), engine, materialInstance, size).draw()
+        BackTexture(requireContext(), engine, materialInstance, size).draw()
+        NormalTexture(requireContext(), engine, materialInstance, size).draw()
 
+        setTextureTransform(size)
         val map = mapOf(MaterialName("Material") to materialInstance)
         mesh = Mesh.from(requireContext().assets, "sample.filamesh", map, engine)
         engine.transformManager.setTransform(
