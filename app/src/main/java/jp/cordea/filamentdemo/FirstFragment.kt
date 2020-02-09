@@ -172,6 +172,13 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
 
     private fun setTextureTransform(size: SizeF) {
         val transform = FloatArray(16)
+        val ratio = size.width / size.height
+        Matrix.setIdentityM(transform, 0)
+        Matrix.rotateM(transform, 0, 90f, 0f, 1f, 0f)
+        Matrix.rotateM(transform, 0, 180f, 1f, 0f, 0f)
+        Matrix.translateM(transform, 0, 0f, 0f, 0.38f)
+        Matrix.translateM(transform, 0, 0f, 0.32f, 0f)
+        Matrix.scaleM(transform, 0, 1f, ratio * 0.23f, 0.23f)
         materialInstance.setParameter(
             "textureTransform",
             MaterialInstance.FloatElement.MAT4,
