@@ -1,13 +1,15 @@
 package jp.cordea.filamentdemo
 
-import android.graphics.Color
-import android.graphics.Paint
+import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.RectF
 import android.graphics.SurfaceTexture
 import android.util.SizeF
 import android.view.Surface
 import com.google.android.filament.*
 
 class FrontTexture(
+    private val context: Context,
     engine: Engine,
     materialInstance: MaterialInstance,
     private val size: SizeF
@@ -15,11 +17,6 @@ class FrontTexture(
     private val surfaceTexture: SurfaceTexture
     private val canvasSurface: Surface
     private val stream: Stream
-
-    private val paint = Paint().apply {
-        color = Color.WHITE
-        style = Paint.Style.FILL
-    }
 
     private val texture: Texture =
         Texture.Builder()
@@ -49,7 +46,9 @@ class FrontTexture(
 
     fun draw() {
         val canvas = canvasSurface.lockCanvas(null)
-        canvas.drawRect(0f, 0f, size.width, size.height, paint)
+        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.front)
+        canvas.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+        bitmap.recycle()
         canvasSurface.unlockCanvasAndPost(canvas)
     }
 }
