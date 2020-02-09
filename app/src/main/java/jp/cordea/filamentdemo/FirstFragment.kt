@@ -108,7 +108,8 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         val size = SizeF(1008f, 625f)
         FrontTexture(requireContext(), engine, materialInstance, size).draw()
         BackTexture(requireContext(), engine, materialInstance, size).draw()
-        NormalTexture(requireContext(), engine, materialInstance, size).draw()
+        FrontNormalTexture(requireContext(), engine, materialInstance, size).draw()
+        BackNormalTexture(requireContext(), engine, materialInstance, size).draw()
 
         setTextureTransform(size)
         val map = mapOf(MaterialName("Material") to materialInstance)
