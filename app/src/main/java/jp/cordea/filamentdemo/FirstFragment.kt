@@ -2,6 +2,8 @@ package jp.cordea.filamentdemo
 
 import android.animation.ValueAnimator
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.RectF
 import android.opengl.Matrix
 import android.os.Bundle
@@ -108,14 +110,21 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         }
 
         val size = SizeF(1008f, 625f)
+        val paint = Paint().apply {
+            isAntiAlias = true
+            color = Color.WHITE
+            textSize = 25f
+        }
         CanvasTexture("frontTexture", engine, materialInstance, size).draw {
             val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.front)
             it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            it.drawText("Photo by Lukas Kloeppel from Pexels", 50f, 70f, paint)
             bitmap.recycle()
         }
         CanvasTexture("backTexture", engine, materialInstance, size).draw {
             val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.back)
             it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            it.drawText("Photo by Septimiu Lupea from Pexels", 50f, 70f, paint)
             bitmap.recycle()
         }
         CanvasTexture("backNormalTexture", engine, materialInstance, size).draw {
