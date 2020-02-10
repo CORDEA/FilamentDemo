@@ -1,6 +1,8 @@
 package jp.cordea.filamentdemo
 
 import android.animation.ValueAnimator
+import android.graphics.BitmapFactory
+import android.graphics.RectF
 import android.opengl.Matrix
 import android.os.Bundle
 import android.util.SizeF
@@ -106,10 +108,28 @@ class FirstFragment : Fragment(), Choreographer.FrameCallback {
         }
 
         val size = SizeF(1008f, 625f)
-        FrontTexture(requireContext(), engine, materialInstance, size).draw()
-        BackTexture(requireContext(), engine, materialInstance, size).draw()
-        FrontNormalTexture(requireContext(), engine, materialInstance, size).draw()
-        BackNormalTexture(requireContext(), engine, materialInstance, size).draw()
+        CanvasTexture("frontTexture", engine, materialInstance, size).draw {
+            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.front)
+            it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            bitmap.recycle()
+        }
+        CanvasTexture("backTexture", engine, materialInstance, size).draw {
+            val bitmap = BitmapFactory.decodeResource(requireContext().resources, R.drawable.back)
+            it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            bitmap.recycle()
+        }
+        CanvasTexture("backNormalTexture", engine, materialInstance, size).draw {
+            val bitmap =
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.back_normal)
+            it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            bitmap.recycle()
+        }
+        CanvasTexture("frontNormalTexture", engine, materialInstance, size).draw {
+            val bitmap =
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.front_normal)
+            it.drawBitmap(bitmap, null, RectF(0f, 0f, size.width, size.height), null)
+            bitmap.recycle()
+        }
 
         setTextureTransform(size)
         val map = mapOf(MaterialName("Material") to materialInstance)
